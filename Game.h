@@ -1,6 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Sprite_Renderer.h"
+#include "Resource_Manager.h"
+
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,

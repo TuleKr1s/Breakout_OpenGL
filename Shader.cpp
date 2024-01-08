@@ -24,22 +24,24 @@ void Shader::compile(const char* vertexSource, const char* fragmentSource, const
 
 	// geometry shader
 	geometry = glCreateShader(GL_GEOMETRY_SHADER);
-	glShaderSource(geometry, 1, &geometrySource, NULL);
-	glCompileShader(geometry);
-	checkCompileErrors(geometry, "GEOMETRY");
+	if (geometrySource != nullptr) {
+		glShaderSource(geometry, 1, &geometrySource, NULL);
+		glCompileShader(geometry);
+		checkCompileErrors(geometry, "GEOMETRY");
+	}
 
 	// shader program
 	this->ID = glCreateProgram();
 	glAttachShader(this->ID, vertex);
 	glAttachShader(this->ID, fragment);
-	if (!geometrySource)	glAttachShader(this->ID, geometry);
+	if (geometrySource != nullptr)	glAttachShader(this->ID, geometry);
 	glLinkProgram(this->ID);
 	checkCompileErrors(this->ID, "PROGRAM");
 
 	// removing shader after linking with shader program
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
-	if (!geometrySource)	glDeleteShader(geometry);
+	if (geometrySource != nullptr)	glDeleteShader(geometry);
 
 }
 

@@ -35,9 +35,15 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 	std::string geometryCode;
 
 	try {
+
 		std::ifstream vertexShaderFile(vShaderFile);
 		std::ifstream fragmentShaderFile(fShaderFile);
 		std::stringstream vShaderStream, fShaderStream;
+
+		if (!vertexShaderFile.is_open())
+			std::cerr << "Failed to load vertex shader file" << std::endl;
+		if (!fragmentShaderFile.is_open())
+			std::cerr << "Failed to load fragment shader file" << std::endl;
 
 		vShaderStream << vertexShaderFile.rdbuf();
 		fShaderStream << fragmentShaderFile.rdbuf();
@@ -75,10 +81,16 @@ Texture ResourceManager::loadTextureFromFile(const char* file, bool alpha) {
 		texture.m_imageFormat = GL_RGBA;
 	}
 
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 
-	texture.generate(width, height, data);
+	int width, height, nrChannels;
+	file = "F:/Programming/Breakout_OpenGL/textures/ball.png";
+	unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+	if (data) {
+		texture.generate(width, height, data);
+	}
+	else {
+		std::cerr << "Failed to load texture" << std::endl;
+	}
 
 	stbi_image_free(data);
 	return texture;
