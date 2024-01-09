@@ -9,6 +9,8 @@ Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderF
 }
 
 Shader ResourceManager::getShader(std::string name) {
+	if (Shaders.find(name) == Shaders.end())
+		std::cerr << "Failed to get Shader: Unknonw name of shader \"" << name << "\"" << std::endl;
 	return Shaders[name];
 }
 
@@ -18,6 +20,8 @@ Texture ResourceManager::loadTexture(const char* file, bool alpha, std::string n
 }
 
 Texture ResourceManager::getTexture(std::string name) {
+	if (Textures.find(name) == Textures.end())
+		std::cerr << "Failed to get Texture: Unknown name of texture \"" << name << "\"" << std::endl;
 	return Textures[name];
 }
 
@@ -83,7 +87,6 @@ Texture ResourceManager::loadTextureFromFile(const char* file, bool alpha) {
 
 
 	int width, height, nrChannels;
-	file = "F:/Programming/Breakout_OpenGL/textures/ball.png";
 	unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 	if (data) {
 		texture.generate(width, height, data);

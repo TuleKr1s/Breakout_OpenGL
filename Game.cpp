@@ -36,6 +36,6 @@ void Game::update(float dt) {
 }
 
 void Game::render() {
-	Renderer->drawSprite(ResourceManager::getTexture("face"), glm::vec2(200.0f, 200.0f), \
+	Renderer->drawSprite(ResourceManager::getTexture("ball"), glm::vec2(200.0f, 200.0f), \
 		glm::vec2(300.0f, 400.0f), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 }
