@@ -134,6 +134,8 @@
   <ItemGroup>
     <ClCompile Include="..\Libs\glad.c" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game_Level.cpp" />
+    <ClCompile Include="Game_Object.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Resource_Manager.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -143,6 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Game_Level.h" />
+    <ClInclude Include="Game_Object.h" />
     <ClInclude Include="Resource_Manager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sprite_Renderer.h" />
@@ -151,7 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\sprite.frag" />
-    <None Include="shaders\sprite.ver" />
+    <None Include="shaders\sprite.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

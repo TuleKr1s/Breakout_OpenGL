@@ -39,6 +39,12 @@
     <ClCompile Include="Sprite_Renderer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Game_Object.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_Level.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -59,12 +65,18 @@
     <ClInclude Include="Sprite_Renderer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Game_Object.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_Level.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\sprite.frag">
       <Filter>Файлы ресурсов</Filter>
     </None>
-    <None Include="shaders\sprite.ver">
+    <None Include="shaders\sprite.vert">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>

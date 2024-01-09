@@ -1,8 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Sprite_Renderer.h"
 #include "Resource_Manager.h"
+#include "Game_Level.h"
+
+#include <vector>
 
 enum GameState {
 	GAME_ACTIVE,
@@ -10,11 +16,18 @@ enum GameState {
 	GAME_WIN
 };
 
+const glm::vec2 PLAYER_SIZE(100.0f, 20.0f);
+const float PLAYER_VELOCITY(500.0f);
+
+
 class Game {
 public:
 
 	Game(unsigned int width, unsigned int heigth);
 	~Game();
+
+	std::vector<GameLevel> m_levels;
+	unsigned int m_level;
 
 	GameState m_state;
 	bool m_keys[1024];
