@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Libs\glad.c" />
+    <ClCompile Include="Ball_Object.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Game_Level.cpp" />
     <ClCompile Include="Game_Object.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball_Object.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Game_Level.h" />
     <ClInclude Include="Game_Object.h" />

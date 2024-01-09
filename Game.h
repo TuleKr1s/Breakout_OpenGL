@@ -7,6 +7,7 @@
 #include "Sprite_Renderer.h"
 #include "Resource_Manager.h"
 #include "Game_Level.h"
+#include "Ball_Object.h"
 
 #include <vector>
 
@@ -18,6 +19,9 @@ enum GameState {
 
 const glm::vec2 PLAYER_SIZE(100.0f, 20.0f);
 const float PLAYER_VELOCITY(500.0f);
+
+const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
+const float BALL_RADIUS = 12.5f;
 
 
 class Game {
