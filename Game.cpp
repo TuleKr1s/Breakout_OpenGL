@@ -87,6 +87,8 @@ void Game::processInput(float dt) {
 
 void Game::update(float dt) {
 	Ball->move(dt, m_width);
+
+	doCollision();
 }
 
 void Game::render() {
@@ -102,4 +104,40 @@ void Game::render() {
 		Ball->draw(*Renderer);
 	}
 
+}
+bool checkCollision(GameObject& one, GameObject& two);
+bool checkCollision(BallObject& one, GameObject& two);
+
+void Game::doCollision() {
+	for (GameObject& box : m_levels[m_level].m_bricks) {
+		if (!box.m_destroyed) {
+			if (checkCollision(*Ball, box)) {
+				if (!box.m_isSolid)
+					box.m_destroyed = true;
+			}
+		}
+	}
+}
+
+bool checkCollision(GameObject& one, GameObject& two) {
+
+	bool collisionX = one.m_position.x + one.m_size.x >= two.m_position.x && two.m_position.x + two.m_size.x >= one.m_position.x;
+	bool collisionY = one.m_position.y + one.m_size.y >= two.m_position.y && two.m_position.y + two.m_size.y >= one.m_position.y;
+
+	return collisionX && collisionY;
+}
+
+bool checkCollision(BallObject& one, GameObject& two) {
+	glm::vec2 center(one.m_position + one.m_radius);
+
+	glm::vec2 aabb_half_extents(two.m_size.x / 2.0f, two.m_size.y / 2.0f);
+	glm::vec2 aabb_center(two.m_position.x + aabb_half_extents.x, two.m_position.y + aabb_half_extents.y);
+
+	glm::vec2 difference = center - aabb_center;
+	glm::vec2 clamped = glm::clamp(difference, -aabb_half_extents, aabb_half_extents);
+
+	glm::vec2 closest = aabb_center + clamped;
+
+	difference = closest - center;
+	return glm::length(difference) < one.m_radius;
 }
