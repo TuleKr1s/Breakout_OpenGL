@@ -48,6 +48,9 @@
     <ClCompile Include="Ball_Object.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Particle_Generator.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -77,12 +80,21 @@
     <ClInclude Include="Ball_Object.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Particle_Generator.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\sprite.frag">
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="shaders\sprite.vert">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="particle.vert">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="particle.frag">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>
