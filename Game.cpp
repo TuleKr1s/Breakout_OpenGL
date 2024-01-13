@@ -1,12 +1,12 @@
 #include "Game.h"
 
 SpriteRenderer* Renderer;
-
 GameObject* Player;
-
 BallObject* Ball;
-
 ParticleGenerator* Particles;
+PostProcessor* Effects;
+
+float shakeTime = 0.0f;
 
 Game::Game(unsigned int width, unsigned int height)
 	: m_state(GAME_ACTIVE), m_keys(), m_width(width), m_height(height) 
@@ -24,8 +24,10 @@ Game::~Game() {
 
 void Game::init() {
 
+	// loading shaders
 	ResourceManager::loadShader("shaders/sprite.vert", "shaders/sprite.frag", nullptr, "sprite");
 	ResourceManager::loadShader("shaders/particle.vert", "shaders/particle.frag", nullptr, "particle");
+	ResourceManager::loadShader("shaders/post_processing.vert", "shaders/post_processing.frag", nullptr, "postprocessing");
 
 
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(m_width), static_cast<float>(m_height), 0.0f, -1.0f, 1.0f);
@@ -71,6 +73,7 @@ void Game::init() {
 	Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::getTexture("ball"));
 
 	Particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
+	Effects = new PostProcessor(ResourceManager::getShader("postprocessing"), m_width, m_height);
 }
 
 void Game::processInput(float dt) {
@@ -126,12 +129,20 @@ void Game::update(float dt) {
 		resetLevel();
 		resetPlayer();
 	}
+
+	if (shakeTime >= 0.0f) {
+		shakeTime -= dt;
+		if (shakeTime <= 0.0f)
+			Effects->shake = false;
+	}
 	
 }
 
 void Game::render() {
 
 	if (m_state == GAME_ACTIVE) {
+		Effects->beginRender();
+
 		Renderer->drawSprite(ResourceManager::getTexture("background"), \
 			glm::vec2(0.0f, 0.0f), glm::vec2(m_width, m_height), 0.0f);
 
@@ -143,12 +154,15 @@ void Game::render() {
 
 		Ball->draw(*Renderer);
 		
+		Effects->endRender();
+		Effects->render(glfwGetTime());
 	}
 
 }
 bool checkCollision(GameObject& one, GameObject& two);
 Collision checkCollision(BallObject& one, GameObject& two);
 Direction vectorDirection(glm::vec2 target);
+
 
 void Game::doCollision() {
 	for (GameObject& box : m_levels[m_level].m_bricks) {
@@ -157,6 +171,10 @@ void Game::doCollision() {
 			if (std::get<0>(collision)) {
 				if (!box.m_isSolid)
 					box.m_destroyed = true;
+				else {
+					shakeTime = 0.05f;
+					Effects->shake = true;
+				}
 				Direction dir = std::get<1>(collision);
 				glm::vec2 diff_vector = std::get<2>(collision);
 

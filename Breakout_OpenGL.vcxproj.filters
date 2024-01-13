@@ -51,6 +51,9 @@
     <ClCompile Include="Particle_Generator.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Post_Processor.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -83,6 +86,9 @@
     <ClInclude Include="Particle_Generator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Post_Processor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\sprite.frag">
@@ -95,6 +101,12 @@
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="particle.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="shaders\post_processing.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="shaders\post_processing.vert">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>
