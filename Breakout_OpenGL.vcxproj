@@ -140,6 +140,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle_Generator.cpp" />
     <ClCompile Include="Post_Processor.cpp" />
+    <ClCompile Include="Power_Up.cpp" />
     <ClCompile Include="Resource_Manager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Sprite_Renderer.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Game_Object.h" />
     <ClInclude Include="Particle_Generator.h" />
     <ClInclude Include="Post_Processor.h" />
+    <ClInclude Include="Power_Up.h" />
     <ClInclude Include="Resource_Manager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sprite_Renderer.h" />

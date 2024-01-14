@@ -10,6 +10,7 @@
 #include "Ball_Object.h"
 #include "Particle_Generator.h"
 #include "Post_Processor.h"
+#include "Power_Up.h"
 
 #include <vector>
 #include <tuple>
@@ -48,6 +49,8 @@ public:
 	bool m_keys[1024];
 	unsigned int m_width, m_height;
 
+	std::vector<PowerUp> PowerUps;
+
 	void init();
 	void resetLevel();
 	void resetPlayer();
@@ -57,6 +60,9 @@ public:
 	void render();
 
 	void doCollision();
+
+	void spawnPowerUps(GameObject& block);
+	void updatePowerUps(float dt);
 
 };
 

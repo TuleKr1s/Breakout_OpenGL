@@ -92,7 +92,7 @@ Texture ResourceManager::loadTextureFromFile(const char* file, bool alpha) {
 		texture.generate(width, height, data);
 	}
 	else {
-		std::cerr << "Failed to load texture" << std::endl;
+		std::cerr << "Failed to load texture: " << file << std::endl;
 	}
 
 	stbi_image_free(data);
