@@ -13,6 +13,7 @@ using namespace irrklang;
 #include "Particle_Generator.h"
 #include "Post_Processor.h"
 #include "Power_Up.h"
+#include "Text_Renderer.h"
 
 #include <vector>
 #include <tuple>
@@ -44,11 +45,14 @@ public:
 	Game(unsigned int width, unsigned int heigth);
 	~Game();
 
+	unsigned int m_lives;
+
 	std::vector<GameLevel> m_levels;
 	unsigned int m_level;
 
 	GameState m_state;
 	bool m_keys[1024];
+	bool m_keysProcessed[1024];
 	unsigned int m_width, m_height;
 
 	std::vector<PowerUp> PowerUps;

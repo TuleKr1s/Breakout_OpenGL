@@ -57,6 +57,9 @@
     <ClCompile Include="Power_Up.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Text_Renderer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -95,6 +98,9 @@
     <ClInclude Include="Power_Up.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Text_Renderer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\sprite.frag">
@@ -113,6 +119,12 @@
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="shaders\post_processing.vert">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="shaders\text_2d.frag">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="shaders\text_2d.vert">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>

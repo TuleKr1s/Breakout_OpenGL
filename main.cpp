@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 #include <iostream>
 
 #include "Game.h"
@@ -96,8 +97,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		if (action == GLFW_PRESS)
 			Breakout.m_keys[key] = true;
-		else if (action == GLFW_RELEASE)
+		else if (action == GLFW_RELEASE) {
 			Breakout.m_keys[key] = false;
+			Breakout.m_keysProcessed[key] = false;
+		}
 	}
 }
 

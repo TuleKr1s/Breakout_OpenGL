@@ -5,6 +5,7 @@ GameObject* Player;
 BallObject* Ball;
 ParticleGenerator* Particles;
 PostProcessor* Effects;
+TextRenderer* Text;
 
 ISoundEngine* SoundEngine = createIrrKlangDevice();
 
@@ -12,7 +13,7 @@ float shakeTime = 0.0f;
 float soundVolume = 0.4f;
 
 Game::Game(unsigned int width, unsigned int height)
-	: m_state(GAME_ACTIVE), m_keys(), m_width(width), m_height(height) 
+	: m_state(GAME_MENU), m_keys(), m_width(width), m_height(height), m_lives(3)
 {
 
 }
@@ -22,7 +23,8 @@ Game::~Game() {
 	delete Player;
 	delete Ball;
 	delete Particles;
-
+	delete Effects;
+	delete Text;
 }
 
 void Game::init() {
@@ -83,6 +85,8 @@ void Game::init() {
 
 	Particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
 	Effects = new PostProcessor(ResourceManager::getShader("postprocessing"), m_width, m_height);
+	Text = new TextRenderer(m_width, m_height);
+	Text->load("fonts/OCRAEXT.TTF", 24);
 
 	SoundEngine->setSoundVolume(soundVolume);
 	SoundEngine->play2D("audio/breakout.mp3", true);
@@ -91,26 +95,55 @@ void Game::init() {
 void Game::processInput(float dt) {
 	
 	float velocity = PLAYER_VELOCITY * dt;
+	if (m_state == GAME_ACTIVE) {
+		if (this->m_keys[GLFW_KEY_A])
+		{
+			if (Player->m_position.x >= 0.0f) {
+				Player->m_position.x -= velocity;
+				if (Ball->m_stuck)
+					Ball->m_position.x -= velocity;
+			}
+		}
+		if (this->m_keys[GLFW_KEY_D])
+		{
+			if (Player->m_position.x <= this->m_width - Player->m_size.x) {
+				Player->m_position.x += velocity;
+				if (Ball->m_stuck)
+					Ball->m_position.x += velocity;
+			}
+		}
+		if (this->m_keys[GLFW_KEY_SPACE])
+			Ball->m_stuck = false;
+	}
 
-	// Перемещаем ракетку
-	if (this->m_keys[GLFW_KEY_A])
-	{
-		if (Player->m_position.x >= 0.0f) {
-			Player->m_position.x -= velocity;
-			if (Ball->m_stuck)
-				Ball->m_position.x -= velocity;
+	if (m_state == GAME_MENU) {
+
+		if (this->m_keys[GLFW_KEY_ENTER] && !this->m_keysProcessed[GLFW_KEY_ENTER])
+		{
+			this->m_state = GAME_ACTIVE;
+			this->m_keysProcessed[GLFW_KEY_ENTER] = true;
+		}
+		if (this->m_keys[GLFW_KEY_W] && !this->m_keysProcessed[GLFW_KEY_W])
+		{
+			this->m_level = (this->m_level + 1) % 4;
+			this->m_keysProcessed[GLFW_KEY_W] = true;
+		}
+		if (this->m_keys[GLFW_KEY_S] && !this->m_keysProcessed[GLFW_KEY_S])
+		{
+			if (this->m_level > 0)
+				--this->m_level;
+			else
+				this->m_level = 3;
+			this->m_keysProcessed[GLFW_KEY_S] = true;
 		}
 	}
-	if (this->m_keys[GLFW_KEY_D])
-	{
-		if (Player->m_position.x <= this->m_width - Player->m_size.x) {
-			Player->m_position.x += velocity;
-			if (Ball->m_stuck)
-				Ball->m_position.x += velocity;
+	if (m_state == GAME_WIN) {
+		if (m_keys[GLFW_KEY_ENTER]) {
+			m_keysProcessed[GLFW_KEY_ENTER] = true;
+			Effects->chaos = false;
+			m_state = GAME_MENU;
 		}
 	}
-	if (this->m_keys[GLFW_KEY_SPACE]) 
-		Ball->m_stuck = false;
 }
 
 void Game::resetLevel() {
@@ -122,6 +155,8 @@ void Game::resetLevel() {
 		m_levels[2].load("levels/three.lvl", m_width, m_height / 2);
 	else if (m_level == 3)
 		m_levels[3].load("levels/four.lvl", m_width, m_height / 2);
+
+	m_lives = 3;
 }
 
 void Game::resetPlayer() {
@@ -140,7 +175,12 @@ void Game::update(float dt) {
 	updatePowerUps(dt);
 
 	if (Ball->m_position.y >= m_height) {
-		resetLevel();
+		--m_lives;
+
+		if (m_lives == 0) {
+			resetLevel();
+			m_state = GAME_MENU;
+		}
 		resetPlayer();
 	}
 
@@ -149,12 +189,19 @@ void Game::update(float dt) {
 		if (shakeTime <= 0.0f)
 			Effects->shake = false;
 	}
+
+	if (m_state == GAME_ACTIVE && m_levels[m_level].isCompleted()) {
+		resetLevel();
+		resetPlayer();
+		Effects->chaos = true;
+		m_state = GAME_WIN;
+	}
 	
 }
 
 void Game::render() {
 
-	if (m_state == GAME_ACTIVE) {
+	if (m_state == GAME_ACTIVE || m_state == GAME_MENU) {
 		Effects->beginRender();
 
 		Renderer->drawSprite(ResourceManager::getTexture("background"), \
@@ -175,6 +222,18 @@ void Game::render() {
 		
 		Effects->endRender();
 		Effects->render(glfwGetTime());
+
+		std::stringstream ss;
+		ss << m_lives;
+		Text->renderText("Lives:" + ss.str(), 5.0f, 5.0f, 1.0f);
+	}
+	if (m_state == GAME_MENU) {
+		Text->renderText("Press ENTER to start", 250.0f, m_height / 2, 1.0f);
+		Text->renderText("Press W or S to select level", 245.0f, m_height / 2 + 20.0f, 0.75f);
+	}
+	if (m_state == GAME_WIN) {
+		Text->renderText("you WON!", 320.0f, m_height / 2 - 20.0f, 1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		Text->renderText("Press ENTER to retry or ESCAPE to quit", 130.0f, m_height / 2, 1.0f, glm::vec3(1.0f, 1.0f, 0.0f));
 	}
 
 }
