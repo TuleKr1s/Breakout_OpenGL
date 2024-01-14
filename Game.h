@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <irrKlang/irrKlang.h>
+using namespace irrklang;
 
 #include "Sprite_Renderer.h"
 #include "Resource_Manager.h"

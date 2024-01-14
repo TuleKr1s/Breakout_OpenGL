@@ -6,7 +6,10 @@ BallObject* Ball;
 ParticleGenerator* Particles;
 PostProcessor* Effects;
 
+ISoundEngine* SoundEngine = createIrrKlangDevice();
+
 float shakeTime = 0.0f;
+float soundVolume = 0.4f;
 
 Game::Game(unsigned int width, unsigned int height)
 	: m_state(GAME_ACTIVE), m_keys(), m_width(width), m_height(height) 
@@ -80,6 +83,9 @@ void Game::init() {
 
 	Particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
 	Effects = new PostProcessor(ResourceManager::getShader("postprocessing"), m_width, m_height);
+
+	SoundEngine->setSoundVolume(soundVolume);
+	SoundEngine->play2D("audio/breakout.mp3", true);
 }
 
 void Game::processInput(float dt) {
@@ -248,32 +254,46 @@ void activatePowerUp(PowerUp& powerUp);
 
 void Game::doCollision() {
 	for (GameObject& box : m_levels[m_level].m_bricks) {
+
 		if (!box.m_destroyed) {
+
 			Collision collision = checkCollision(*Ball, box);
+
 			if (std::get<0>(collision)) {
+
 				if (!box.m_isSolid) {
 					box.m_destroyed = true;
 					spawnPowerUps(box);
+					SoundEngine->play2D("audio/bleep.mp3", false);
 				}
 				else {
 					shakeTime = 0.05f;
 					Effects->shake = true;
+					SoundEngine->setSoundVolume(1.0f);
+					SoundEngine->play2D("audio/solid.wav", false);
+					SoundEngine->setSoundVolume(soundVolume);
 				}
+
 				Direction dir = std::get<1>(collision);
 				glm::vec2 diff_vector = std::get<2>(collision);
-				if (!(Ball->m_passThrough && !box.m_isSolid)) {
-					if (dir == LEFT || dir == RIGHT) {
-						Ball->m_velocity.x = -Ball->m_velocity.x;
 
+				if (!(Ball->m_passThrough && !box.m_isSolid)) {
+
+					if (dir == LEFT || dir == RIGHT) {
+
+						Ball->m_velocity.x = -Ball->m_velocity.x;
 						float penetration = Ball->m_radius - std::abs(diff_vector.x);
+
 						if (dir == LEFT)
 							Ball->m_position.x += penetration;
 						else
 							Ball->m_position.x -= penetration;
 					}
 					else {
+
 						Ball->m_velocity.y = -Ball->m_velocity.y;
 						float penetration = Ball->m_radius - std::abs(diff_vector.y);
+
 						if (dir == UP)
 							Ball->m_position.y -= penetration;
 						else
@@ -296,16 +316,23 @@ void Game::doCollision() {
 		Ball->m_velocity = glm::normalize(Ball->m_velocity) * glm::length(oldVelocity);
 
 		Ball->m_stuck = Ball->m_sticky;
+		SoundEngine->play2D("audio/bleep.wav", false);
 	}
 
 	for (PowerUp& powerUp : PowerUps) {
+
 		if (!powerUp.m_destroyed) {
+
 			if (powerUp.m_position.y >= m_height)
 				powerUp.m_destroyed = true;
+
 			if (checkCollision(*Player, powerUp)) {
 				activatePowerUp(powerUp);
 				powerUp.m_destroyed = true;
 				powerUp.m_activated = true;
+				SoundEngine->setSoundVolume(1.0f);
+				SoundEngine->play2D("audio/powerup.wav", false);
+				SoundEngine->setSoundVolume(soundVolume);
 			}
 		}
 	}

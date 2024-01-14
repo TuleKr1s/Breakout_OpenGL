@@ -43,6 +43,23 @@ int main() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// set icon
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("textures/icon.png", &width, &height, &nrChannels, 0);
+	if (data) {
+		GLFWimage icon;
+		icon.width = width;
+		icon.height = height;
+		icon.pixels = data;
+
+		glfwSetWindowIcon(window, 1, &icon);
+
+		stbi_image_free(data);
+	}
+	else {
+		std::cerr << "Failed to load icon" << std::endl;
+	}
+
 	Breakout.init();
 
 	float deltaTime = 0.0f;
